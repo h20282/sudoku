@@ -16,18 +16,16 @@ inline void print(const char *format, const First &first, const Rest &...rest) {
     print(format + 2, rest...);
 }
 
-template <typename... Args>
-inline void println(const Args &...args) {
-    print(args...);
-    print('\n');
-}
-
 #define println(...)    \
     print(__VA_ARGS__); \
     print('\n');
 
+#define LOG(...)                              \
+    print("{}:{} ", __FILE_NAME__, __LINE__); \
+    println(__VA_ARGS__);
+
 constexpr const int n = 9;
-constexpr const bool print_detail = false;
+constexpr const bool print_detail = true;
 
 int cell[n][n] = {0};
 
@@ -76,7 +74,7 @@ std::vector<int> AvaliableNumber(int x, int y) {
     bool has[n + 1] = {false};
     auto check = [&](int x, int y) {
         has[CellAt(x, y)] = true;
-        // println("({}, {}), has[{}] = true", x, y, CellAt(x, y))
+        // LOG("({}, {}), has[{}] = true", x, y, CellAt(x, y))
     };
 
     for (int i = 0; i < n; ++i) {
@@ -115,7 +113,7 @@ void dfs(int deep = 0) {
 
         if (print_detail) {
             for (int i = 0; i < deep; ++i) { print(" "); }
-            println("no avaliable number at ({}, {})", x, y);
+            LOG("no avaliable number at ({}, {})", x, y);
         }
 
         return;
@@ -126,7 +124,7 @@ void dfs(int deep = 0) {
 
         if (print_detail) {
             for (int i = 0; i < deep; ++i) { print(" "); }
-            println("step {}, fill ({}, {}) = {}", ++step_cnt, x, y, number);
+            LOG("step {}, fill ({}, {}) = {}", ++step_cnt, x, y, number);
             PrintCell();
         }
 
@@ -134,7 +132,7 @@ void dfs(int deep = 0) {
 
         if (print_detail) {
             for (int i = 0; i < deep; ++i) { print(" "); }
-            println("step {}, clear ({}, {}) = 0", ++step_cnt, x, y);
+            LOG("step {}, clear ({}, {}) = 0", ++step_cnt, x, y);
             PrintCell();
         }
 
@@ -177,7 +175,7 @@ int main() {
 
     dfs();
 
-    println("end, call_cnt = {}, total solution = {}", call_cnt, solution);
+    LOG("end, call_cnt = {}, total solution = {}", call_cnt, solution);
 
     return 0;
 }
